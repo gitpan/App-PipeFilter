@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Output::Yaml;
 BEGIN {
-  $App::PipeFilter::Role::Output::Yaml::VERSION = '0.002';
+  $App::PipeFilter::Role::Output::Yaml::VERSION = '0.003';
 }
 
 use Moose::Role;
@@ -24,7 +24,7 @@ App::PipeFilter::Role::Output::Yaml - serialize output as YAML
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

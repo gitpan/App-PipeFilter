@@ -1,6 +1,6 @@
 package App::PipeFilter::Generic;
 BEGIN {
-  $App::PipeFilter::Generic::VERSION = '0.002';
+  $App::PipeFilter::Generic::VERSION = '0.003';
 }
 
 use Moose;
@@ -47,7 +47,7 @@ App::PipeFilter::Generic - a generic pipeline filter
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

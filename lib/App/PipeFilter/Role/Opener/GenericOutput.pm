@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Opener::GenericOutput;
 BEGIN {
-  $App::PipeFilter::Role::Opener::GenericOutput::VERSION = '0.002';
+  $App::PipeFilter::Role::Opener::GenericOutput::VERSION = '0.003';
 }
 
 use Moose::Role;
@@ -30,7 +30,7 @@ App::PipeFilter::Role::Opener::GenericOutput - a generic method to open output f
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

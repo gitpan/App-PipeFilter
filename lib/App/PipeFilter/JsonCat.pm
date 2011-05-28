@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonCat;
 BEGIN {
-  $App::PipeFilter::JsonCat::VERSION = '0.002';
+  $App::PipeFilter::JsonCat::VERSION = '0.003';
 }
 
 use Moose;
@@ -19,7 +19,7 @@ App::PipeFilter::JsonCat - useless use of cat(1) for JSON streams
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

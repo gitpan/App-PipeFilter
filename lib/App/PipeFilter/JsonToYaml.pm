@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonToYaml;
 BEGIN {
-  $App::PipeFilter::JsonToYaml::VERSION = '0.002';
+  $App::PipeFilter::JsonToYaml::VERSION = '0.003';
 }
 
 use Moose;
@@ -26,7 +26,7 @@ App::PipeFilter::JsonToYaml - translate streams of JSON objects into YAML
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

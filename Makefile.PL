@@ -28,11 +28,13 @@ my %WriteMakefileArgs = (
   'LICENSE' => 'perl',
   'NAME' => 'App::PipeFilter',
   'PREREQ_PM' => {
+    'JSON::Path' => '0',
     'JSON::XS' => '0',
     'Moose' => '0',
-    'MooseX::Getopt' => '0'
+    'MooseX::Getopt' => '0',
+    'YAML::Syck' => '0'
   },
-  'VERSION' => '0.002',
+  'VERSION' => '0.003',
   'test' => {
     'TESTS' => 't/*.t'
   }

@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonMap;
 BEGIN {
-  $App::PipeFilter::JsonMap::VERSION = '0.002';
+  $App::PipeFilter::JsonMap::VERSION = '0.003';
 }
 
 use Moose;
@@ -55,7 +55,7 @@ App::PipeFilter::JsonMap - map input fields to output fields by renaming them
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 

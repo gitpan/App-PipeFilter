@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Opener::GenericInput;
 BEGIN {
-  $App::PipeFilter::Role::Opener::GenericInput::VERSION = '0.002';
+  $App::PipeFilter::Role::Opener::GenericInput::VERSION = '0.003';
 }
 
 use Moose::Role;
@@ -30,7 +30,7 @@ App::PipeFilter::Role::Opener::GenericInput - common method to open input files
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
