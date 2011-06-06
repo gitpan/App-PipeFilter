@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Transform::None;
 BEGIN {
-  $App::PipeFilter::Role::Transform::None::VERSION = '0.003';
+  $App::PipeFilter::Role::Transform::None::VERSION = '0.004';
 }
 
 use Moose::Role;
@@ -22,7 +22,7 @@ App::PipeFilter::Role::Transform::None - don't transform data at all
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

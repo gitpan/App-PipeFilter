@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonSort;
 BEGIN {
-  $App::PipeFilter::JsonSort::VERSION = '0.003';
+  $App::PipeFilter::JsonSort::VERSION = '0.004';
 }
 
 use Moose;
@@ -80,7 +80,7 @@ App::PipeFilter::JsonSort - a sort(1)-like filter that understands JSON fields
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

@@ -17,7 +17,7 @@ requires:
   JSON::XS: 0
   Moose: 0
   MooseX::Getopt: 0
-  YAML::Syck: 0
+  YAML::Any: 0
 resources:
   repository: git://github.com/rcaputo/app-pipefilter.git
-version: 0.003
+version: 0.004

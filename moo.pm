@@ -1,7 +1,4 @@
 package App::PipeFilter::Generic;
-BEGIN {
-  $App::PipeFilter::Generic::VERSION = '0.004';
-}
 
 use Moose;
 
@@ -42,11 +39,28 @@ __END__
 
 =pod
 
-=abstract a generic pipeline filter.
+=head1 NAME
+
+App::PipeFilter::Generic - a generic pipeline filter.
 
 =head1 SYNOPSIS
 
-=for example App::PipeFilter::JsonToYaml
+This is L<App::PipeFilter::JsonToYaml|App::PipeFilter::JsonToYaml>.
+
+  package App::PipeFilter::JsonToYaml;
+  
+  use Moose;
+  extends 'App::PipeFilter::Generic';
+  
+  with (
+    "App::PipeFilter::Role::Reader::Sysread",
+    "App::PipeFilter::Role::Input::Json",
+    "App::PipeFilter::Role::Transform::None",
+    "App::PipeFilter::Role::Output::Yaml",
+  );
+  
+  1;
+
 
 =head1 DESCRIPTION
 
@@ -72,7 +86,14 @@ returns an array of the deserialized data structures.
 
 This method is usually implemented by Input roles.
 
-=for example App::PipeFilter::Role::Input::Json decode_input
+This is L<App::PipeFilter::Role::Input::Json|App::PipeFilter::Role::Input::Json> sub L<decode_input()|App::PipeFilter::Role::Input::Json/decode_input>.
+
+  sub decode_input {
+    my ($self, $buffer_ref) = @_;
+    my (@return) = $self->_json()->incr_parse($$buffer_ref);
+    $$buffer_ref = "";
+    return @return;
+  }
 
 =head2 encode_output ARRAY
 
@@ -82,7 +103,12 @@ data structure.
 
 This method is usually implemented by Output roles.
 
-=for example App::PipeFilter::Role::Output::Yaml encode_output
+This is L<App::PipeFilter::Role::Output::Yaml|App::PipeFilter::Role::Output::Yaml> sub L<encode_output()|App::PipeFilter::Role::Output::Yaml/encode_output>.
+
+  sub encode_output {
+    # Skips $self in $_[0].
+    return map { Dump($_) } @_[1..$#_];
+  }
 
 =head2 filter_file IN_FILEHANDLE, OUT_FILEHANDLE
 
@@ -93,7 +119,19 @@ filehandle to the output data sink.
 filter_file() invokes read_input(), decode_input(), transform() and
 encode_output() until a single input file is completely filtered.
 
-=for example filter_file
+This is L<filter_file()|/filter_file>.
+
+  sub filter_file {
+    my ($self, $ifh, $ofh) = @_;
+  
+    my $buffer = "";
+  
+    while ($self->read_input($ifh, \$buffer)) {
+      next unless my (@input) = $self->decode_input(\$buffer);
+      next unless my (@output) = $self->transform(@input);
+      print $ofh $_ foreach $self->encode_output(@output);
+    }
+  }
 
 =head2 next_input_file
 
@@ -114,7 +152,20 @@ files named by next_input_file().
 
 open_input() is implemented in Opener roles.
 
-=for example App::PipeFilter::Role::Opener::GenericInput open_input
+This is L<App::PipeFilter::Role::Opener::GenericInput|App::PipeFilter::Role::Opener::GenericInput> sub L<open_input()|App::PipeFilter::Role::Opener::GenericInput/open_input>.
+
+  sub open_input {
+    my ($self, $filename) = @_;
+  
+    if ($filename eq '-') {
+      warn "reading from standard input\n" if $self->verbose();
+      return \*STDIN;
+    }
+  
+    warn "reading from $filename\n" if $self->verbose();
+    open my $fh, "<", $filename or die "can't open $filename: $!";
+    return $fh;
+  }
 
 =head2 open_output FILENAME
 
@@ -126,7 +177,20 @@ standard output for writing results.
 
 open_output() is implemented in Opener roles.
 
-=for example App::PipeFilter::Role::Opener::GenericOutput open_output
+This is L<App::PipeFilter::Role::Opener::GenericOutput|App::PipeFilter::Role::Opener::GenericOutput> sub L<open_output()|App::PipeFilter::Role::Opener::GenericOutput/open_output>.
+
+  sub open_output {
+    my ($self, $filename) = @_;
+  
+    if ($filename eq '-') {
+      warn "writing to standard output\n" if $self->verbose();
+      return \*STDOUT;
+    }
+  
+    warn "writing to $filename\n" if $self->verbose();
+    open my $fh, ">", $filename or die "can't write $filename: $!";
+    return $fh;
+  }
 
 =head2 run
 
@@ -136,9 +200,23 @@ on the command line.  Each input file is opened with open_input().
 The resulting input and output file handles are passed to
 filter_file(), which filters the entire file.
 
-run() is implemented in [% doc.module() %].
+run() is implemented in App::PipeFilter::Generic.
 
-=for example run
+This is L<run()|/run>.
+
+  sub run {
+    my $self = shift();
+  
+    my $ofh = $self->open_output('-');
+  
+    while (defined (my $input_filename = $self->next_input_file())) {
+      my $ifh = $self->open_input($input_filename);
+      $self->filter_file($ifh, $ofh);
+    }
+  
+    # Exit value.
+    0;
+  }
 
 =head2 transform ARRAY
 
@@ -152,13 +230,18 @@ Common data transformations may be implemented in Transform roles.
 Mostly however, individual utility classes like
 L<App::PipeFilter::JsonMap> define their own transformations.
 
-=for example App::PipeFilter::Role::Transform::None transform
+This is L<App::PipeFilter::Role::Transform::None|App::PipeFilter::Role::Transform::None> sub L<transform()|App::PipeFilter::Role::Transform::None/transform>.
+
+  sub transform {
+    # Skips $self in $_[0].
+    return @_[1..$#_];
+  }
 
 =head1 SEE ALSO
 
 You may read this module's implementation in its entirety at
 
-  perldoc -m [% doc.module() %]
+  perldoc -m App::PipeFilter::Generic
 
 L<App::PipeFilter::Generic::Json> consumes common roles for filters
 that read and write streams of JSON objects.
@@ -176,8 +259,13 @@ TODO - Standard =repository
 
 L<https://github.com/rcaputo/app-pipefilter>
 
-=copyright 2011 Rocco Caputo
+=head1 COPYRIGHT AND LICENSE
+
+App::PipeFilter::Generic is Copyright 2011 by Rocco Caputo
+All rights are reserved.
+App::PipeFilter::Generic is released under the same terms as Perl itself.
 
 =cut
 
 # vim: ts=2 sw=2 expandtab
+

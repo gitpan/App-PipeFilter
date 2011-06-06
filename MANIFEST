@@ -83,6 +83,10 @@ lib/App/PipeFilter/Role/Output/Yaml.pm
 lib/App/PipeFilter/Role/Reader/LineByLine.pm
 lib/App/PipeFilter/Role/Reader/Sysread.pm
 lib/App/PipeFilter/Role/Transform/None.pm
+moo.html
+moo.pm
+pod2htmd.tmp
+pod2htmi.tmp
 t/000-report-versions.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

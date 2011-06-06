@@ -1,6 +1,6 @@
 package App::PipeFilter::MysqlToJson;
 BEGIN {
-  $App::PipeFilter::MysqlToJson::VERSION = '0.003';
+  $App::PipeFilter::MysqlToJson::VERSION = '0.004';
 }
 
 use Moose;
@@ -47,7 +47,7 @@ App::PipeFilter::MysqlToJson - translate mysql batch output to JSON
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

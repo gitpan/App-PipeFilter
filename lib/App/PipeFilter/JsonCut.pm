@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonCut;
 BEGIN {
-  $App::PipeFilter::JsonCut::VERSION = '0.003';
+  $App::PipeFilter::JsonCut::VERSION = '0.004';
 }
 
 use Moose;
@@ -39,7 +39,7 @@ App::PipeFilter::JsonCut - return specified fields from a JSON stream
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

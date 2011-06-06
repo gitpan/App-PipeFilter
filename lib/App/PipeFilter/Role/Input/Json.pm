@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Input::Json;
 BEGIN {
-  $App::PipeFilter::Role::Input::Json::VERSION = '0.003';
+  $App::PipeFilter::Role::Input::Json::VERSION = '0.004';
 }
 
 use Moose::Role;
@@ -33,7 +33,7 @@ App::PipeFilter::Role::Input::Json - parse input as a stream of JSON records
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

@@ -12,7 +12,7 @@ json2yaml - convert files of JSON objects into a stream of YAML objects
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

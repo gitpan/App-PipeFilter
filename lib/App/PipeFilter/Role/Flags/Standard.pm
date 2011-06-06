@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Flags::Standard;
 BEGIN {
-  $App::PipeFilter::Role::Flags::Standard::VERSION = '0.003';
+  $App::PipeFilter::Role::Flags::Standard::VERSION = '0.004';
 }
 
 use Moose::Role;
@@ -42,7 +42,7 @@ App::PipeFilter::Role::Flags::Standard - standard flag attributes and getopt
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

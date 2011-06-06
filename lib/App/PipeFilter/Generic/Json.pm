@@ -1,6 +1,6 @@
 package App::PipeFilter::Generic::Json;
 BEGIN {
-  $App::PipeFilter::Generic::Json::VERSION = '0.003';
+  $App::PipeFilter::Generic::Json::VERSION = '0.004';
 }
 
 use Moose;
@@ -25,7 +25,7 @@ App::PipeFilter::Generic::Json - a generic JSON pipeline filter
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

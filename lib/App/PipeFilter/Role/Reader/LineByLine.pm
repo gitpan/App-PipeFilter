@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Reader::LineByLine;
 BEGIN {
-  $App::PipeFilter::Role::Reader::LineByLine::VERSION = '0.003';
+  $App::PipeFilter::Role::Reader::LineByLine::VERSION = '0.004';
 }
 
 use Moose::Role;
@@ -23,7 +23,7 @@ App::PipeFilter::Role::Reader::LineByLine - read input streams one line at a tim
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 

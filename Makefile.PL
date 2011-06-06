@@ -32,9 +32,9 @@ my %WriteMakefileArgs = (
     'JSON::XS' => '0',
     'Moose' => '0',
     'MooseX::Getopt' => '0',
-    'YAML::Syck' => '0'
+    'YAML::Any' => '0'
   },
-  'VERSION' => '0.003',
+  'VERSION' => '0.004',
   'test' => {
     'TESTS' => 't/*.t'
   }

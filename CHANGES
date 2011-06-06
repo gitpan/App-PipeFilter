@@ -1,4 +1,33 @@
 ================================
+2011-06-06 10:29:55 -0400 v0_004
+================================
+
+  commit ddfebb5d53d8f49819fb79a8d75d975e262b8d07
+  Author: Rocco Caputo <rcaputo@cpan.org>
+  Date:   Mon Jun 6 10:29:04 2011 -0400
+  
+    Switch to YAML::Any for output.
+
+  commit 274d9e3372ca55a2f83f9f7c703eee6db99c8eb6
+  Merge: 2b959fe 6fe98ba
+  Author: Rocco Caputo <rcaputo@cpan.org>
+  Date:   Mon Jun 6 10:25:36 2011 -0400
+  
+    Merge branch 'master' of github.com:rcaputo/app-pipefilter
+
+  commit 768becd9c324729aa9d1e7440b0d4b758e62d6a5
+  Author: Ingy dot Net <ingy@ingy.net>
+  Date:   Tue Jun 7 00:09:05 2011 +1000
+  
+    Allow YAML implementation to be configurable.
+
+  commit 2b959fee86c6e99d7b109d769c382b774ce56592
+  Author: Rocco Caputo <rcaputo@cpan.org>
+  Date:   Sun Jun 5 04:00:36 2011 -0400
+  
+    Use PPI to detect "use", "extends", and "with" statements. 
+
+================================
 2011-05-28 16:01:20 -0400 v0_003
 ================================
 

@@ -1,0 +1,261 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>App::PipeFilter::Generic - a generic pipeline filter.</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:_postfix@neige.apple.com" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#public_methods">PUBLIC METHODS</a></li>
+	<ul>
+
+		<li><a href="#decode_input_scalar_ref">decode_input SCALAR_REF</a></li>
+		<li><a href="#encode_output_array">encode_output ARRAY</a></li>
+		<li><a href="#filter_file_in_filehandle__out_filehandle">filter_file IN_FILEHANDLE, OUT_FILEHANDLE</a></li>
+		<li><a href="#next_input_file">next_input_file</a></li>
+		<li><a href="#open_input_filename">open_input FILENAME</a></li>
+		<li><a href="#open_output_filename">open_output FILENAME</a></li>
+		<li><a href="#run">run</a></li>
+		<li><a href="#transform_array">transform ARRAY</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#repository">REPOSITORY</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>App::PipeFilter::Generic - a generic pipeline filter.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>This is <a href="/App/PipeFilter/JsonToYaml.html">App::PipeFilter::JsonToYaml</a>.</p>
+<pre>
+  package App::PipeFilter::JsonToYaml;
+  
+  use Moose;
+  extends 'App::PipeFilter::Generic';
+  
+  with (
+    &quot;App::PipeFilter::Role::Reader::Sysread&quot;,
+    &quot;App::PipeFilter::Role::Input::Json&quot;,
+    &quot;App::PipeFilter::Role::Transform::None&quot;,
+    &quot;App::PipeFilter::Role::Output::Yaml&quot;,
+  );
+  
+  1;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>App::PipeFilter::Generic is a generic shell pipeline filter.  It is
+designed to be customized by subclassing and consuming roles that
+implement specific behaviors.</p>
+<p>For example, <a href="/App/PipeFilter/JsonToYaml.html">the App::PipeFilter::JsonToYaml manpage</a> extends the generic
+pipeline filter with a role to read data in large chunks, a role to
+parse that input as a stream of JSON objects, a role that doesn't
+alter the data that has been read, and a role to format the output as
+YAML.</p>
+<p>
+</p>
+<hr />
+<h1><a name="public_methods">PUBLIC METHODS</a></h1>
+<p>
+</p>
+<h2><a name="decode_input_scalar_ref">decode_input SCALAR_REF</a></h2>
+<p><code>decode_input()</code> accepts a reference to an input buffer containing raw
+octets from some input stream.  It deserializes as many input records
+as it can from the buffer.  It removes the deserialized octets from
+the buffer, leaving any unused data for another time.  <code>decode_input()</code>
+returns an array of the deserialized data structures.</p>
+<p>This method is usually implemented by Input roles.</p>
+<p>This is <a href="/App/PipeFilter/Role/Input/Json.html">App::PipeFilter::Role::Input::Json</a> sub <a href="/App/PipeFilter/Role/Input/Json.html#decode_input">decode_input()</a>.</p>
+<pre>
+  sub decode_input {
+    my ($self, $buffer_ref) = @_;
+    my (@return) = $self-&gt;_json()-&gt;incr_parse($$buffer_ref);
+    $$buffer_ref = &quot;&quot;;
+    return @return;
+  }</pre>
+<p>
+</p>
+<h2><a name="encode_output_array">encode_output ARRAY</a></h2>
+<p><code>encode_output()</code> accepts an array of Perl data structures to be output.
+It returns an array of serialized data, one element for each input
+data structure.</p>
+<p>This method is usually implemented by Output roles.</p>
+<p>This is <a href="/App/PipeFilter/Role/Output/Yaml.html">App::PipeFilter::Role::Output::Yaml</a> sub <a href="/App/PipeFilter/Role/Output/Yaml.html#encode_output">encode_output()</a>.</p>
+<pre>
+  sub encode_output {
+    # Skips $self in $_[0].
+    return map { Dump($_) } @_[1..$#_];
+  }</pre>
+<p>
+</p>
+<h2><a name="filter_file_in_filehandle__out_filehandle">filter_file IN_FILEHANDLE, OUT_FILEHANDLE</a></h2>
+<p><code>filter_file()</code> translates one input file to output.  IN_FILEHANDLE is
+an open filehandle to the source data.  OUT_FILEHANDLE is an open
+filehandle to the output data sink.</p>
+<p><code>filter_file()</code> invokes <code>read_input()</code>, <code>decode_input()</code>, <code>transform()</code> and
+<code>encode_output()</code> until a single input file is completely filtered.</p>
+<p>This is <a href="#filter_file">filter_file()</a>.</p>
+<pre>
+  sub filter_file {
+    my ($self, $ifh, $ofh) = @_;
+  
+    my $buffer = &quot;&quot;;
+  
+    while ($self-&gt;read_input($ifh, \$buffer)) {
+      next unless my (@input) = $self-&gt;decode_input(\$buffer);
+      next unless my (@output) = $self-&gt;transform(@input);
+      print $ofh $_ foreach $self-&gt;encode_output(@output);
+    }
+  }</pre>
+<p>
+</p>
+<h2><a name="next_input_file">next_input_file</a></h2>
+<p><code>next_input_file()</code> returns the name of the next file to read.
+App::PipeFilter::Generic's <code>run()</code> method uses it to iterate over the
+list of input files provided on the command line.</p>
+<p><code>next_input_file()</code> is implemented in
+<a href="/App/PipeFilter/Role/Flags/Standard.html">the App::PipeFilter::Role::Flags::Standard manpage</a>.</p>
+<p>
+</p>
+<h2><a name="open_input_filename">open_input FILENAME</a></h2>
+<p><code>open_input()</code> opens a named file and returns the opened filehandle to
+it.  The special file name &quot;-&quot; opens STDIN.</p>
+<p>App::PipeFilter::Generic's <code>run()</code> method uses <code>open_input()</code> to open the
+files named by <code>next_input_file()</code>.</p>
+<p><code>open_input()</code> is implemented in Opener roles.</p>
+<p>This is <a href="/App/PipeFilter/Role/Opener/GenericInput.html">App::PipeFilter::Role::Opener::GenericInput</a> sub <a href="/App/PipeFilter/Role/Opener/GenericInput.html#open_input">open_input()</a>.</p>
+<pre>
+  sub open_input {
+    my ($self, $filename) = @_;
+  
+    if ($filename eq '-') {
+      warn &quot;reading from standard input\n&quot; if $self-&gt;verbose();
+      return \*STDIN;
+    }
+  
+    warn &quot;reading from $filename\n&quot; if $self-&gt;verbose();
+    open my $fh, &quot;&lt;&quot;, $filename or die &quot;can't open $filename: $!&quot;;
+    return $fh;
+  }</pre>
+<p>
+</p>
+<h2><a name="open_output_filename">open_output FILENAME</a></h2>
+<p><code>open_output()</code> opens a named file and returns the opened filehandle to
+it.  The special file name &quot;-&quot; opens STDOUT.</p>
+<p>App::PipeFilter::Generic's <code>run()</code> method uses <code>open_output()</code> to open
+standard output for writing results.</p>
+<p><code>open_output()</code> is implemented in Opener roles.</p>
+<p>This is <a href="/App/PipeFilter/Role/Opener/GenericOutput.html">App::PipeFilter::Role::Opener::GenericOutput</a> sub <a href="/App/PipeFilter/Role/Opener/GenericOutput.html#open_output">open_output()</a>.</p>
+<pre>
+  sub open_output {
+    my ($self, $filename) = @_;
+  
+    if ($filename eq '-') {
+      warn &quot;writing to standard output\n&quot; if $self-&gt;verbose();
+      return \*STDOUT;
+    }
+  
+    warn &quot;writing to $filename\n&quot; if $self-&gt;verbose();
+    open my $fh, &quot;&gt;&quot;, $filename or die &quot;can't write $filename: $!&quot;;
+    return $fh;
+  }</pre>
+<p>
+</p>
+<h2><a name="run">run</a></h2>
+<p><code>run()</code> opens standard output using open_output(&quot;-&quot;).  It then calls
+<code>next_input_file()</code> to iterate through all the input file names provided
+on the command line.  Each input file is opened with <code>open_input()</code>.
+The resulting input and output file handles are passed to
+<code>filter_file()</code>, which filters the entire file.</p>
+<p><code>run()</code> is implemented in App::PipeFilter::Generic.</p>
+<p>This is <a href="#run">run()</a>.</p>
+<pre>
+  sub run {
+    my $self = shift();
+  
+    my $ofh = $self-&gt;open_output('-');
+  
+    while (defined (my $input_filename = $self-&gt;next_input_file())) {
+      my $ifh = $self-&gt;open_input($input_filename);
+      $self-&gt;filter_file($ifh, $ofh);
+    }
+  
+    # Exit value.
+    0;
+  }</pre>
+<p>
+</p>
+<h2><a name="transform_array">transform ARRAY</a></h2>
+<p><code>transform()</code> accepts an array of data references.  It returns another
+array of data references after performing some transformative function
+on each one.  The resulting array may have greater or fewer items than
+the input array.  <code>transform()</code> may return an empty array if all input
+records are to be discarded.</p>
+<p>Common data transformations may be implemented in Transform roles.
+Mostly however, individual utility classes like
+<a href="/App/PipeFilter/JsonMap.html">the App::PipeFilter::JsonMap manpage</a> define their own transformations.</p>
+<p>This is <a href="/App/PipeFilter/Role/Transform/None.html">App::PipeFilter::Role::Transform::None</a> sub <a href="/App/PipeFilter/Role/Transform/None.html#transform">transform()</a>.</p>
+<pre>
+  sub transform {
+    # Skips $self in $_[0].
+    return @_[1..$#_];
+  }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>You may read this module's implementation in its entirety at</p>
+<pre>
+  perldoc -m App::PipeFilter::Generic</pre>
+<p><a href="/App/PipeFilter/Generic/Json.html">the App::PipeFilter::Generic::Json manpage</a> consumes common roles for filters
+that read and write streams of JSON objects.</p>
+<p><a href="/App/PipeFilter.html">the App::PipeFilter manpage</a> has top-level documentation including a table of
+contents for all the libraries and utilities included in the project.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p><a href="https://rt.cpan.org/Public/Dist/Display.html?Name=App-PipeFilter">https://rt.cpan.org/Public/Dist/Display.html?Name=App-PipeFilter</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="repository">REPOSITORY</a></h1>
+<p>TODO - Standard =repository</p>
+<p><a href="https://github.com/rcaputo/app-pipefilter">https://github.com/rcaputo/app-pipefilter</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>App::PipeFilter::Generic is Copyright 2011 by Rocco Caputo
+All rights are reserved.
+App::PipeFilter::Generic is released under the same terms as Perl itself.</p>
+
+</body>
+
+</html>

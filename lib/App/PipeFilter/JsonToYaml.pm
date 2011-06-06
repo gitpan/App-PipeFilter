@@ -1,17 +1,16 @@
 package App::PipeFilter::JsonToYaml;
 BEGIN {
-  $App::PipeFilter::JsonToYaml::VERSION = '0.003';
+  $App::PipeFilter::JsonToYaml::VERSION = '0.004';
 }
 
 use Moose;
-
 extends 'App::PipeFilter::Generic';
 
-with qw(
-  App::PipeFilter::Role::Reader::Sysread
-  App::PipeFilter::Role::Input::Json
-  App::PipeFilter::Role::Transform::None
-  App::PipeFilter::Role::Output::Yaml
+with (
+  "App::PipeFilter::Role::Reader::Sysread",
+  "App::PipeFilter::Role::Input::Json",
+  "App::PipeFilter::Role::Transform::None",
+  "App::PipeFilter::Role::Output::Yaml",
 );
 
 1;
@@ -26,7 +25,7 @@ App::PipeFilter::JsonToYaml - translate streams of JSON objects into YAML
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
