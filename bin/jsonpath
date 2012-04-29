@@ -12,7 +12,7 @@ jsonpath - use JSON::Path to cut out selected portions of JSON objects
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 
@@ -31,6 +31,8 @@ first column is col0.  jmap(1) may be used to give each output field a
 more useful name.
 
 =head1 SEE ALSO
+
+JSONPath documentation: L<http://goessner.net/articles/JsonPath/>
 
 You may read this utility's implementation in its entirety at
 

@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Output::Json;
-BEGIN {
-  $App::PipeFilter::Role::Output::Json::VERSION = '0.004';
+{
+  $App::PipeFilter::Role::Output::Json::VERSION = '0.005';
 }
 
 use Moose::Role;
@@ -24,7 +24,7 @@ App::PipeFilter::Role::Output::Json - serialize output as one JSON object per li
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

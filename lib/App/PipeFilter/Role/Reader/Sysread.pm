@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Reader::Sysread;
-BEGIN {
-  $App::PipeFilter::Role::Reader::Sysread::VERSION = '0.004';
+{
+  $App::PipeFilter::Role::Reader::Sysread::VERSION = '0.005';
 }
 
 use Moose::Role;
@@ -22,7 +22,7 @@ App::PipeFilter::Role::Reader::Sysread - read input streams in large chunks for 
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

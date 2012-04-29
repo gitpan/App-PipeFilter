@@ -1,6 +1,6 @@
 package App::PipeFilter::Generic::Json;
-BEGIN {
-  $App::PipeFilter::Generic::Json::VERSION = '0.004';
+{
+  $App::PipeFilter::Generic::Json::VERSION = '0.005';
 }
 
 use Moose;
@@ -9,6 +9,7 @@ extends 'App::PipeFilter::Generic';
 
 with qw(
   App::PipeFilter::Role::Reader::Sysread
+  App::PipeFilter::Role::Writer::Print
   App::PipeFilter::Role::Input::Json
   App::PipeFilter::Role::Output::Json
 );
@@ -25,7 +26,7 @@ App::PipeFilter::Generic::Json - a generic JSON pipeline filter
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

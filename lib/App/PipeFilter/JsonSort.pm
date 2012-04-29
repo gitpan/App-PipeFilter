@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonSort;
-BEGIN {
-  $App::PipeFilter::JsonSort::VERSION = '0.004';
+{
+  $App::PipeFilter::JsonSort::VERSION = '0.005';
 }
 
 use Moose;
@@ -8,6 +8,7 @@ extends 'App::PipeFilter::Generic';
 with qw(
   App::PipeFilter::Role::Reader::Sysread
   App::PipeFilter::Role::Input::Json
+  App::PipeFilter::Role::Writer::Print
   App::PipeFilter::Role::Transform::None
 );
 
@@ -35,15 +36,50 @@ has r => (
   documentation => 'reverse sort order',
 );
 
+my @preferred_path = qw(
+  /bin
+  /usr/bin
+  /sbin
+  /usr/sbin
+);
+
+has sort => (
+  is            => 'rw',
+  isa           => 'Str',
+  lazy          => 1,
+  documentation => 'sort(1) command to use',
+  default       => sub {
+    my $self = shift();
+    foreach (@preferred_path) {
+      return "$_/sort" if -e "$_/sort";
+    }
+    return "/usr/bin/env sort";
+  },
+);
+
+has cut => (
+  is            => 'rw',
+  isa           => 'Str',
+  lazy          => 1,
+  documentation => 'cut(1) command to use',
+  default       => sub {
+    my $self = shift();
+    foreach (@preferred_path) {
+      return "$_/cut" if -e "$_/cut";
+    }
+    return "/usr/bin/env cut";
+  },
+);
+
 sub open_output {
   my ($self, $filename) = @_;
 
   my $sort = (
-    '/usr/bin/sort' .
+    $self->sort() .
     " -t '\t'" .
     ($self->n() ? ' -n' : '') .
     ($self->r() ? ' -r' : '') .
-    ' | /usr/bin/cut -f ' . (scalar(@{$self->k()}) + 1) . '-' .
+    ' | ' . $self->cut() . ' -f ' . (scalar(@{$self->k()}) + 1) . '-' .
     (
       ($filename eq '-')
       ? ''
@@ -80,7 +116,7 @@ App::PipeFilter::JsonSort - a sort(1)-like filter that understands JSON fields
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

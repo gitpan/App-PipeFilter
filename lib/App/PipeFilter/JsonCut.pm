@@ -1,10 +1,12 @@
 package App::PipeFilter::JsonCut;
-BEGIN {
-  $App::PipeFilter::JsonCut::VERSION = '0.004';
+{
+  $App::PipeFilter::JsonCut::VERSION = '0.005';
 }
 
 use Moose;
 extends 'App::PipeFilter::Generic::Json';
+
+# TODO - Refactor into a common role?  Duplicated in JsonToTsv.pm.
 
 has o => (
   is            => 'rw',
@@ -39,7 +41,7 @@ App::PipeFilter::JsonCut - return specified fields from a JSON stream
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

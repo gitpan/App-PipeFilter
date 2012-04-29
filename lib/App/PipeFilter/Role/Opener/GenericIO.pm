@@ -1,6 +1,6 @@
 package App::PipeFilter::Role::Opener::GenericIO;
-BEGIN {
-  $App::PipeFilter::Role::Opener::GenericIO::VERSION = '0.004';
+{
+  $App::PipeFilter::Role::Opener::GenericIO::VERSION = '0.005';
 }
 
 use Moose::Role;
@@ -22,7 +22,7 @@ App::PipeFilter::Role::Opener::GenericIO - generic methods to open input and out
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 

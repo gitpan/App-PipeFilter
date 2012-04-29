@@ -1,6 +1,6 @@
 package App::PipeFilter::JsonPath;
-BEGIN {
-  $App::PipeFilter::JsonPath::VERSION = '0.004';
+{
+  $App::PipeFilter::JsonPath::VERSION = '0.005';
 }
 
 use Moose;
@@ -57,7 +57,7 @@ App::PipeFilter::JsonPath - return JSON::Path-specified fields from a JSON strea
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
 
